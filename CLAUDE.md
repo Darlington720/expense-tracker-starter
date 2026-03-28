@@ -11,6 +11,11 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Architecture
 
-Single-page React 19 app (Vite, JSX, no TypeScript). All app logic lives in `src/App.jsx` — a single component managing finance transactions with local state (no backend, no router, no state library).
+Single-page React 19 app (Vite, JSX, no TypeScript). No backend, router, or state library.
 
-**Known bugs:** Transaction amounts are stored as strings, so `totalIncome`/`totalExpenses` computations use string concatenation instead of numeric addition. New transactions also store `amount` as a string from the input.
+- **`App.jsx`** — Owns the `transactions` array state and composes child components.
+- **`Summary.jsx`** — Computes and displays total income, expenses, and balance from transactions.
+- **`TransactionForm.jsx`** — Owns form state; calls `onAddTransaction` callback to add new entries.
+- **`TransactionList.jsx`** — Owns filter state; renders a filtered table of transactions.
+
+Categories are defined independently in `TransactionForm` and `TransactionList` (shared constant: `["food", "housing", "utilities", "transport", "entertainment", "salary", "other"]`).
