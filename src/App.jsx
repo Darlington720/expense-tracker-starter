@@ -2,6 +2,7 @@ import { useState } from 'react'
 import Summary from './Summary'
 import TransactionForm from './TransactionForm'
 import TransactionList from './TransactionList'
+import SpendingChart from './SpendingChart'
 import './App.css'
 
 function App() {
@@ -31,6 +32,7 @@ function App() {
 
       <Summary transactions={transactions} />
       <TransactionForm onAddTransaction={handleAddTransaction} />
+      <SpendingChart transactions={transactions} />
       <TransactionList transactions={transactions} onDeleteTransaction={handleDeleteTransaction} />
     </div>
   );
