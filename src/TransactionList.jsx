@@ -1,6 +1,5 @@
 import { useState } from 'react';
-
-const categories = ["food", "housing", "utilities", "transport", "entertainment", "salary", "other"];
+import { CATEGORIES } from './constants';
 
 function TransactionList({ transactions, onDeleteTransaction }) {
   const [filterType, setFilterType] = useState("all");
@@ -18,20 +17,22 @@ function TransactionList({ transactions, onDeleteTransaction }) {
     <div className="transactions">
       <h2>Transactions</h2>
       <div className="filters">
-        <select value={filterType} onChange={(e) => setFilterType(e.target.value)}>
+        <label htmlFor="filter-type" className="sr-only">Filter by type</label>
+        <select id="filter-type" value={filterType} onChange={(e) => setFilterType(e.target.value)}>
           <option value="all">All Types</option>
           <option value="income">Income</option>
           <option value="expense">Expense</option>
         </select>
-        <select value={filterCategory} onChange={(e) => setFilterCategory(e.target.value)}>
+        <label htmlFor="filter-category" className="sr-only">Filter by category</label>
+        <select id="filter-category" value={filterCategory} onChange={(e) => setFilterCategory(e.target.value)}>
           <option value="all">All Categories</option>
-          {categories.map(cat => (
+          {CATEGORIES.map(cat => (
             <option key={cat} value={cat}>{cat}</option>
           ))}
         </select>
       </div>
 
-      <table>
+      <table aria-label="Transactions">
         <thead>
           <tr>
             <th>Date</th>
@@ -51,11 +52,17 @@ function TransactionList({ transactions, onDeleteTransaction }) {
                 {t.type === "income" ? "+" : "-"}${t.amount}
               </td>
               <td>
-                <button className="delete-btn" onClick={() => {
-                  if (window.confirm("Are you sure you want to delete this transaction?")) {
-                    onDeleteTransaction(t.id);
-                  }
-                }}>Delete</button>
+                <button
+                  className="delete-btn"
+                  aria-label={`Delete ${t.description}`}
+                  onClick={() => {
+                    if (window.confirm("Are you sure you want to delete this transaction?")) {
+                      onDeleteTransaction(t.id);
+                    }
+                  }}
+                >
+                  Delete
+                </button>
               </td>
             </tr>
           ))}
