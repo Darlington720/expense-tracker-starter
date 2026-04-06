@@ -1,13 +1,33 @@
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell } from 'recharts'
 
 const COLORS = {
-  food: '#f87171',
-  housing: '#60a5fa',
-  utilities: '#fbbf24',
-  transport: '#34d399',
-  entertainment: '#a78bfa',
-  salary: '#fb923c',
-  other: '#94a3b8',
+  food: '#e05c5c',
+  housing: '#4a7b9d',
+  utilities: '#c9a84c',
+  transport: '#6b9e78',
+  entertainment: '#9b7ec8',
+  salary: '#d4945a',
+  other: '#7a7670',
+}
+
+const CustomTooltip = ({ active, payload }) => {
+  if (!active || !payload?.length) return null
+  const { name, value } = payload[0].payload
+  return (
+    <div style={{
+      background: '#1a1d22',
+      border: '1px solid rgba(255,255,255,0.1)',
+      borderRadius: '6px',
+      padding: '10px 14px',
+      fontFamily: "'DM Sans', sans-serif",
+      fontSize: '13px',
+    }}>
+      <div style={{ color: '#8a8579', textTransform: 'capitalize', marginBottom: 4 }}>{name}</div>
+      <div style={{ color: '#e8e4de', fontFamily: "'Playfair Display', serif", fontSize: '16px' }}>
+        ${value.toFixed(2)}
+      </div>
+    </div>
+  )
 }
 
 function SpendingChart({ transactions }) {
@@ -27,24 +47,25 @@ function SpendingChart({ transactions }) {
   return (
     <div className="spending-chart">
       <h2>Spending by Category</h2>
-      <ResponsiveContainer width="100%" height={300}>
-        <BarChart data={data}>
+      <ResponsiveContainer width="100%" height={220}>
+        <BarChart data={data} barCategoryGap="20%">
           <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.04)" />
-          <XAxis dataKey="name" tick={{ fill: '#555a63', fontSize: 12 }} axisLine={false} tickLine={false} />
-          <YAxis tick={{ fill: '#555a63', fontSize: 12 }} axisLine={false} tickLine={false} />
-          <Tooltip
-            formatter={(value) => `$${value.toFixed(2)}`}
-            contentStyle={{
-              background: '#13151d',
-              border: '1px solid rgba(255,255,255,0.07)',
-              borderRadius: 8,
-              color: '#e8e6e3',
-              fontSize: 13,
-            }}
+          <XAxis
+            dataKey="name"
+            tick={{ fill: '#5a564f', fontSize: 11, textTransform: 'capitalize' }}
+            axisLine={{ stroke: 'rgba(255,255,255,0.06)' }}
+            tickLine={false}
           />
+          <YAxis
+            tick={{ fill: '#5a564f', fontSize: 11 }}
+            axisLine={false}
+            tickLine={false}
+            tickFormatter={(v) => `$${v}`}
+          />
+          <Tooltip content={<CustomTooltip />} cursor={{ fill: 'rgba(255,255,255,0.03)' }} />
           <Bar dataKey="value" radius={[4, 4, 0, 0]}>
             {data.map((entry) => (
-              <Cell key={entry.name} fill={COLORS[entry.name] || '#8884d8'} />
+              <Cell key={entry.name} fill={COLORS[entry.name] || '#7a7670'} />
             ))}
           </Bar>
         </BarChart>
